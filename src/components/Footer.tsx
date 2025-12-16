@@ -44,7 +44,7 @@ const Footer = () => {
           </Stack>
         </SimpleGrid>
       </Container>
-      <Box borderTopWidth={1} borderStyle={'solid'} borderColor={'gray.700'}>
+      <Box borderTopWidth={0} borderStyle={'solid'} borderColor={'gray.700'}>
         <Container maxW={'container.xl'} py={4}>
           <Stack direction={{ base: 'column', md: 'row' }} spacing={4} justify={{ base: 'center', md: 'space-between' }} align={{ base: 'center', md: 'center' }}>
             <Text textAlign="center">© 2025 CienciaLink Bolivia. Todos los derechos reservados.</Text>

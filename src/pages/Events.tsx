@@ -1,4 +1,5 @@
 import { Box, Button, Container, Heading, SimpleGrid, Text, Badge, Stack } from '@chakra-ui/react'
+import { Link as RouterLink } from 'react-router-dom'
 
 const Events = () => {
   return (
@@ -23,7 +24,7 @@ const Events = () => {
               </Stack>
               <Heading size="lg" mb={3}>{event.title}</Heading>
               <Text color="gray.600" mb={6}>{event.desc}</Text>
-              <Button colorScheme="brand" variant="outline">Registrarme</Button>
+              <Button as={RouterLink} to="/registro" colorScheme="brand" variant="outline">Registrarme</Button>
             </Box>
           ))}
         </SimpleGrid>

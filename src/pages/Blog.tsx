@@ -79,10 +79,24 @@ const Blog = () => {
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10} mb={20}>
           {filteredPosts.map((post) => (
             <Box key={post.id} borderWidth="1px" borderRadius="lg" overflow="hidden">
-              <Image src={post.image} alt={post.title} h="200px" w="100%" objectFit="cover" />
+              <RouterLink to={`/blog/${post.id}`}>
+                <Image 
+                  src={post.image} 
+                  alt={post.title} 
+                  h="200px" 
+                  w="100%" 
+                  objectFit="cover" 
+                  transition="transform 0.2s"
+                  _hover={{ transform: 'scale(1.05)' }}
+                />
+              </RouterLink>
               <Box p={6}>
                 <Text fontSize="sm" color="gray.500" mb={2}>{post.date}</Text>
-                <Heading size="md" mb={4} lineHeight="short">{post.title}</Heading>
+                <Heading size="md" mb={4} lineHeight="short">
+                  <RouterLink to={`/blog/${post.id}`}>
+                    {post.title}
+                  </RouterLink>
+                </Heading>
                 <Stack direction="row" align="center" mt={4}>
                   <Avatar size="xs" name={post.author} />
                   <Text fontSize="sm" fontWeight="bold">{post.author}</Text>

@@ -1,4 +1,5 @@
 import { Box, Button, Container, Flex, Heading, Icon, SimpleGrid, Stack, Text, VStack, Image } from '@chakra-ui/react'
+import { Link as RouterLink } from 'react-router-dom'
 import { Section } from '../components/Section'
 import { CourseCard } from '../components/CourseCard'
 import { FaRobot, FaLaptopCode, FaMicroscope, FaUsers, FaCertificate, FaHandshake } from 'react-icons/fa'
@@ -17,7 +18,7 @@ const Home = () => {
               <Text fontSize="xl" color="gray.600">
                 Cursos accesibles, kits de robótica y experiencias científicas para todos. Únete a la revolución educativa.
               </Text>
-              <Button size="lg" colorScheme="brand" px={8}>
+              <Button as={RouterLink} to="/cursos" size="lg" colorScheme="brand" px={8}>
                 Explorar Cursos
               </Button>
             </VStack>
@@ -144,12 +145,12 @@ const Home = () => {
               <Text color="brand.500" fontWeight="bold" fontSize="sm" mb={2}>{event.type.toUpperCase()}</Text>
               <Heading size="md" mb={2}>{event.title}</Heading>
               <Text color="gray.600" mb={4}>{event.date}</Text>
-              <Button variant="link" colorScheme="brand">Ver detalles</Button>
+              <Button as={RouterLink} to="/eventos" variant="link" colorScheme="brand">Ver detalles</Button>
             </Box>
           ))}
         </SimpleGrid>
         <Box textAlign="center" mt={8}>
-          <Button variant="outline" colorScheme="brand">Ver todos los eventos</Button>
+          <Button as={RouterLink} to="/eventos" variant="outline" colorScheme="brand">Ver todos los eventos</Button>
         </Box>
       </Section>
 
@@ -159,17 +160,15 @@ const Home = () => {
           <Image 
             src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_Fundaci%C3%B3n_Sim%C3%B3n_I._Pati%C3%B1o.png" 
             alt="Fundación Simón I. Patiño" 
-            filter="grayscale(100%)" 
-            _hover={{ filter: 'grayscale(0%)' }} 
             transition="all 0.3s"
+            _hover={{ transform: 'scale(1.05)' }}
             fallbackSrc="https://via.placeholder.com/150x80?text=Fundacion+Patino"
           />
           <Image 
             src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Escudo_de_la_Universidad_Mayor_de_San_Andr%C3%A9s.png" 
             alt="UMSA" 
-            filter="grayscale(100%)" 
-            _hover={{ filter: 'grayscale(0%)' }} 
             transition="all 0.3s"
+            _hover={{ transform: 'scale(1.05)' }}
             maxH="100px"
             mx="auto"
             fallbackSrc="https://via.placeholder.com/150x80?text=UMSA"
@@ -177,9 +176,8 @@ const Home = () => {
           <Image 
             src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Logo_UPB.png" 
             alt="UPB" 
-            filter="grayscale(100%)" 
-            _hover={{ filter: 'grayscale(0%)' }} 
             transition="all 0.3s"
+            _hover={{ transform: 'scale(1.05)' }}
             maxH="80px"
             mx="auto"
             fallbackSrc="https://via.placeholder.com/150x80?text=UPB"
@@ -187,9 +185,8 @@ const Home = () => {
           <Image 
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Escudo_Colegio_San_Calixto.png/240px-Escudo_Colegio_San_Calixto.png" 
             alt="Colegio San Calixto" 
-            filter="grayscale(100%)" 
-            _hover={{ filter: 'grayscale(0%)' }} 
             transition="all 0.3s"
+            _hover={{ transform: 'scale(1.05)' }}
             maxH="90px"
             mx="auto"
             fallbackSrc="https://via.placeholder.com/150x80?text=San+Calixto"
