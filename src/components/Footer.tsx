@@ -4,8 +4,8 @@ import { Rocket } from 'lucide-react'
 
 const Footer = () => {
   return (
-    <Box bg="gray.900" color="gray.50">
-      <Container as={Stack} maxW={'container.xl'} py={10}>
+    <Box bg="gray.900" color="gray.50" py={10} mt="-1px">
+      <Container maxW={'container.xl'}>
         <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={8}>
           <Stack spacing={6}>
             <Flex alignItems="center">
@@ -43,14 +43,11 @@ const Footer = () => {
             </Stack>
           </Stack>
         </SimpleGrid>
+        
+        <Text pt={10} fontSize="sm" color="gray.500" textAlign="center">
+          © 2025 CienciaLink Bolivia. Todos los derechos reservados.
+        </Text>
       </Container>
-      <Box borderTopWidth={0} borderStyle={'solid'} borderColor={'gray.700'}>
-        <Container maxW={'container.xl'} py={4}>
-          <Stack direction={{ base: 'column', md: 'row' }} spacing={4} justify={{ base: 'center', md: 'space-between' }} align={{ base: 'center', md: 'center' }}>
-            <Text textAlign="center">© 2025 CienciaLink Bolivia. Todos los derechos reservados.</Text>
-          </Stack>
-        </Container>
-      </Box>
     </Box>
   )
 }

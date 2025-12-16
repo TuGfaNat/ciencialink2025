@@ -2,16 +2,29 @@ import { Box, Button, Container, FormControl, FormLabel, Heading, Input, SimpleG
 import { FaMapMarkerAlt, FaPhone, FaEnvelope } from 'react-icons/fa'
 import { useState } from 'react'
 
+import { ContactService } from '../services/contactService'
+
 const Contact = () => {
   const toast = useToast()
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    // Simulate submission
-    setTimeout(() => {
-      setLoading(false)
+    
+    // Get form data
+    const form = e.target as HTMLFormElement
+    const formData = new FormData(form)
+    
+    const data = {
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      phone: formData.get('phone') as string,
+      message: formData.get('message') as string,
+    }
+
+    try {
+      await ContactService.sendMessage(data)
       toast({
         title: 'Mensaje enviado',
         description: "Gracias por contactarnos. Te responderemos pronto.",
@@ -19,7 +32,18 @@ const Contact = () => {
         duration: 5000,
         isClosable: true,
       })
-    }, 1500)
+      form.reset()
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: "Hubo un problema al enviar tu mensaje. Intenta nuevamente.",
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -78,19 +102,19 @@ const Contact = () => {
               <VStack spacing={4}>
                 <FormControl isRequired>
                   <FormLabel>Nombre Completo</FormLabel>
-                  <Input placeholder="Juan Pérez" />
+                  <Input name="name" placeholder="Juan Pérez" />
                 </FormControl>
                 <FormControl isRequired>
                   <FormLabel>Correo Electrónico</FormLabel>
-                  <Input type="email" placeholder="juan@ejemplo.com" />
+                  <Input name="email" type="email" placeholder="juan@ejemplo.com" />
                 </FormControl>
                 <FormControl>
                   <FormLabel>Teléfono</FormLabel>
-                  <Input placeholder="+591 70000000" />
+                  <Input name="phone" placeholder="+591 70000000" />
                 </FormControl>
                 <FormControl isRequired>
                   <FormLabel>Mensaje</FormLabel>
-                  <Textarea placeholder="Hola, quisiera información sobre..." rows={6} />
+                  <Textarea name="message" placeholder="Hola, quisiera información sobre..." rows={6} />
                 </FormControl>
                 <Button type="submit" colorScheme="brand" size="lg" w="full" isLoading={loading}>
                   Enviar Mensaje

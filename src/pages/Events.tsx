@@ -1,7 +1,18 @@
 import { Box, Button, Container, Heading, SimpleGrid, Text, Badge, Stack } from '@chakra-ui/react'
-import { Link as RouterLink } from 'react-router-dom'
+import { useState } from 'react'
+import { EventRegistrationModal } from '../components/EventRegistrationModal'
 
 const Events = () => {
+  const [selectedEvent, setSelectedEvent] = useState<string | null>(null)
+
+  const handleRegister = (eventName: string) => {
+    setSelectedEvent(eventName)
+  }
+
+  const handleClose = () => {
+    setSelectedEvent(null)
+  }
+
   return (
     <Box pt={10}>
       <Container maxW="container.xl">
@@ -24,10 +35,19 @@ const Events = () => {
               </Stack>
               <Heading size="lg" mb={3}>{event.title}</Heading>
               <Text color="gray.600" mb={6}>{event.desc}</Text>
-              <Button as={RouterLink} to="/registro" colorScheme="brand" variant="outline">Registrarme</Button>
+              <Button onClick={() => handleRegister(event.title)} colorScheme="brand" variant="outline">Registrarme</Button>
             </Box>
           ))}
         </SimpleGrid>
+
+        {/* Modal */}
+        {selectedEvent && (
+          <EventRegistrationModal 
+            isOpen={!!selectedEvent} 
+            onClose={handleClose} 
+            eventName={selectedEvent} 
+          />
+        )}
       </Container>
     </Box>
   )

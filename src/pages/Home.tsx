@@ -3,8 +3,19 @@ import { Link as RouterLink } from 'react-router-dom'
 import { Section } from '../components/Section'
 import { CourseCard } from '../components/CourseCard'
 import { FaRobot, FaLaptopCode, FaMicroscope, FaUsers, FaCertificate, FaHandshake } from 'react-icons/fa'
+import { useEffect, useState } from 'react'
+import { BlogService, BlogPost } from '../services/blogService'
 
 const Home = () => {
+  const [posts, setPosts] = useState<BlogPost[]>([])
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      const data = await BlogService.getAll()
+      setPosts(data)
+    }
+    loadPosts()
+  }, [])
   return (
     <Box>
       {/* Hero Section */}
@@ -141,11 +152,22 @@ const Home = () => {
             { title: 'Webinar: IA para Todos', date: '22 de Marzo', type: 'Virtual' },
             { title: 'Taller de Arduino', date: '05 de Abril', type: 'Presencial' },
           ].map((event, i) => (
-            <Box key={i} border="1px" borderColor="gray.200" p={6} borderRadius="lg" _hover={{ borderColor: 'brand.500' }}>
+            <Box 
+              key={i} 
+              as={RouterLink} 
+              to="/eventos" 
+              border="1px" 
+              borderColor="gray.200" 
+              p={6} 
+              borderRadius="lg" 
+              _hover={{ borderColor: 'brand.500', transform: 'translateY(-2px)', shadow: 'md' }}
+              transition="all 0.2s"
+              display="block"
+            >
               <Text color="brand.500" fontWeight="bold" fontSize="sm" mb={2}>{event.type.toUpperCase()}</Text>
               <Heading size="md" mb={2}>{event.title}</Heading>
               <Text color="gray.600" mb={4}>{event.date}</Text>
-              <Button as={RouterLink} to="/eventos" variant="link" colorScheme="brand">Ver detalles</Button>
+              <Text color="brand.600" fontWeight="semibold">Ver detalles →</Text>
             </Box>
           ))}
         </SimpleGrid>
@@ -154,42 +176,51 @@ const Home = () => {
         </Box>
       </Section>
 
+      {/* Latest Blog Posts */}
+      <Section title="Últimas Novedades" bg="white">
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
+          {posts.slice(0, 3).map((post) => (
+            <Box 
+              key={post.id} 
+              as={RouterLink} 
+              to={`/blog/${post.id}`}
+              borderWidth="1px" 
+              borderRadius="xl" 
+              overflow="hidden" 
+              _hover={{ shadow: 'lg', transform: 'translateY(-2px)' }} 
+              transition="all 0.2s"
+            >
+              <Image src={post.image} alt={post.title} h="200px" w="full" objectFit="cover" />
+              <Box p={6}>
+                <Text fontSize="sm" color="brand.500" fontWeight="bold" mb={2}>{post.date}</Text>
+                <Heading size="md" mb={3}>{post.title}</Heading>
+                <Text color="gray.600" noOfLines={3}>{post.content}</Text>
+                <Text mt={4} color="brand.600" fontWeight="semibold">Leer más →</Text>
+              </Box>
+            </Box>
+          ))}
+        </SimpleGrid>
+        <Box textAlign="center" mt={8}>
+          <Button as={RouterLink} to="/blog" variant="outline" colorScheme="brand">Ver todas las noticias</Button>
+        </Box>
+      </Section>
+
       {/* Alliances */}
       <Section title="Nuestros Aliados" bg="gray.50">
-        <SimpleGrid columns={{ base: 2, md: 4 }} spacing={10} alignItems="center" opacity={0.9}>
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} alignItems="center" opacity={0.9} justifyItems="center">
           <Image 
-            src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Logo_Fundaci%C3%B3n_Sim%C3%B3n_I._Pati%C3%B1o.png" 
+            src="/images/fundacion-patino.jpg" 
             alt="Fundación Simón I. Patiño" 
             transition="all 0.3s"
             _hover={{ transform: 'scale(1.05)' }}
-            fallbackSrc="https://via.placeholder.com/150x80?text=Fundacion+Patino"
+            maxH="100px"
           />
           <Image 
-            src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Escudo_de_la_Universidad_Mayor_de_San_Andr%C3%A9s.png" 
+            src="/images/logo-umsa.png" 
             alt="UMSA" 
             transition="all 0.3s"
             _hover={{ transform: 'scale(1.05)' }}
-            maxH="100px"
-            mx="auto"
-            fallbackSrc="https://via.placeholder.com/150x80?text=UMSA"
-          />
-          <Image 
-            src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Logo_UPB.png" 
-            alt="UPB" 
-            transition="all 0.3s"
-            _hover={{ transform: 'scale(1.05)' }}
-            maxH="80px"
-            mx="auto"
-            fallbackSrc="https://via.placeholder.com/150x80?text=UPB"
-          />
-          <Image 
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Escudo_Colegio_San_Calixto.png/240px-Escudo_Colegio_San_Calixto.png" 
-            alt="Colegio San Calixto" 
-            transition="all 0.3s"
-            _hover={{ transform: 'scale(1.05)' }}
-            maxH="90px"
-            mx="auto"
-            fallbackSrc="https://via.placeholder.com/150x80?text=San+Calixto"
+            maxH="120px"
           />
         </SimpleGrid>
       </Section>
@@ -199,7 +230,7 @@ const Home = () => {
         <Container maxW="container.md">
           <Heading mb={6}>¿Listo para empezar?</Heading>
           <Text fontSize="lg" mb={8}>Únete a nuestra comunidad y descubre el mundo de la ciencia y tecnología.</Text>
-          <Button size="lg" bg="white" color="brand.600" _hover={{ bg: 'gray.100' }}>
+          <Button as={RouterLink} to="/contacto" size="lg" bg="white" color="brand.600" _hover={{ bg: 'gray.100' }}>
             Contáctanos
           </Button>
         </Container>

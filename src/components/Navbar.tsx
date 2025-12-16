@@ -29,8 +29,8 @@ const Navbar = () => {
             <ChakraLink as={RouterLink} to="/eventos" fontWeight="medium" color="gray.600" _hover={{ color: 'brand.500' }}>
               Eventos
             </ChakraLink>
-            <Button as={RouterLink} to="/registro" colorScheme="brand" size="sm">
-              Inscribirse
+            <Button as={RouterLink} to="/contacto" colorScheme="brand" size="sm">
+              Contáctanos
             </Button>
           </Stack>
         </Flex>
