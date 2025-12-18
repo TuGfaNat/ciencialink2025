@@ -1,6 +1,7 @@
 import { Box, Container, SimpleGrid, Stack, Text, Link, Icon, Flex } from '@chakra-ui/react'
-import { FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaMapMarkerAlt, FaEnvelope, FaWhatsapp } from 'react-icons/fa'
+import { FaFacebook, FaInstagram, FaMapMarkerAlt, FaEnvelope, FaWhatsapp } from 'react-icons/fa'
 import { Rocket } from 'lucide-react'
+import { Link as RouterLink } from 'react-router-dom'
 
 const Footer = () => {
   return (
@@ -19,11 +20,11 @@ const Footer = () => {
 
           <Stack align={'flex-start'}>
             <Text fontWeight={'500'} fontSize={'lg'} mb={2}>Enlaces Rápidos</Text>
-            <Link href={'/'}>Inicio</Link>
-            <Link href={'/cursos'}>Cursos</Link>
-            <Link href={'/eventos'}>Eventos</Link>
-            <Link href={'/blog'}>Blog</Link>
-            <Link href={'/faq'}>Preguntas Frecuentes</Link>
+            <Link as={RouterLink} to={'/'}>Inicio</Link>
+            <Link as={RouterLink} to={'/cursos'}>Cursos</Link>
+            <Link as={RouterLink} to={'/eventos'}>Eventos</Link>
+            <Link as={RouterLink} to={'/blog'}>Blog</Link>
+            <Link as={RouterLink} to={'/faq'}>Preguntas Frecuentes</Link>
           </Stack>
 
           <Stack align={'flex-start'}>
@@ -36,10 +37,12 @@ const Footer = () => {
           <Stack align={'flex-start'}>
             <Text fontWeight={'500'} fontSize={'lg'} mb={2}>Síguenos</Text>
             <Stack direction={'row'} spacing={6}>
-              <Link href={'#'}><Icon as={FaFacebook} w={6} h={6} /></Link>
-              <Link href={'#'}><Icon as={FaInstagram} w={6} h={6} /></Link>
-              <Link href={'#'}><Icon as={FaTwitter} w={6} h={6} /></Link>
-              <Link href={'#'}><Icon as={FaYoutube} w={6} h={6} /></Link>
+              <Link href={'https://www.facebook.com/ciencialinkbolivia'} isExternal>
+                <Icon as={FaFacebook} w={6} h={6} _hover={{ color: 'brand.400' }} />
+              </Link>
+              <Link href={'https://www.instagram.com/ciencialinkbolivia/'} isExternal>
+                <Icon as={FaInstagram} w={6} h={6} _hover={{ color: 'brand.400' }} />
+              </Link>
             </Stack>
           </Stack>
         </SimpleGrid>

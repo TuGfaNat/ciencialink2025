@@ -1,4 +1,4 @@
-import { Box, Button, Container, Flex, Heading, Image, List, ListIcon, ListItem, SimpleGrid, Stack, Text, VStack, Badge, Spinner, Center, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, FormControl, FormLabel, Input, useToast } from '@chakra-ui/react'
+import { Box, Button, Container, Flex, Heading, Image, List, ListIcon, ListItem, SimpleGrid, Stack, Text, VStack, Badge, Spinner, Center, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, FormControl, FormLabel, Input, useToast, Select, HStack } from '@chakra-ui/react'
 import { CheckCircle, Clock, Calendar, Video } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -15,7 +15,8 @@ const CourseDetails = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    phone: ''
+    phone: '',
+    countryCode: '+591'
   })
   const [submitting, setSubmitting] = useState(false)
 
@@ -42,11 +43,11 @@ const CourseDetails = () => {
         course_id: course.id,
         student_name: formData.name,
         student_email: formData.email,
-        student_phone: formData.phone
+        student_phone: `${formData.countryCode} ${formData.phone}`
       })
       toast({ title: '¡Inscripción Exitosa!', description: 'Nos pondremos en contacto contigo pronto.', status: 'success', duration: 5000 })
       onClose()
-      setFormData({ name: '', email: '', phone: '' })
+      setFormData({ name: '', email: '', phone: '', countryCode: '+591' })
     } catch (error) {
       toast({ title: 'Error', description: 'Hubo un problema al inscribirte. Intenta de nuevo.', status: 'error' })
     } finally {
@@ -156,7 +157,22 @@ const CourseDetails = () => {
 
             <FormControl mb={4} isRequired>
               <FormLabel>Teléfono / WhatsApp</FormLabel>
-              <Input placeholder="Ej. 77712345" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
+              <HStack>
+                <Select
+                  w="120px"
+                  value={formData.countryCode}
+                  onChange={(e) => setFormData({ ...formData, countryCode: e.target.value })}
+                >
+                    <option value="+591">🇧🇴 +591</option>
+                    <option value="+51">🇵🇪 +51</option>
+                    <option value="+56">🇨🇱 +56</option>
+                    <option value="+54">🇦🇷 +54</option>
+                    <option value="+55">🇧🇷 +55</option>
+                    <option value="+1">🇺🇸 +1</option>
+                    <option value="+34">🇪🇸 +34</option>
+                </Select>
+                <Input placeholder="Ej. 77712345" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
+              </HStack>
             </FormControl>
           </ModalBody>
 

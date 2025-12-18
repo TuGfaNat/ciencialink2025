@@ -1,4 +1,4 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, FormControl, FormLabel, Input, VStack, useToast, Text } from '@chakra-ui/react'
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, FormControl, FormLabel, Input, VStack, useToast, Text, Select, HStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { ContactService } from '../services/contactService'
 
@@ -19,12 +19,42 @@ export const EventRegistrationModal = ({ isOpen, onClose, eventName }: EventRegi
     const form = e.target as HTMLFormElement
     const formData = new FormData(form)
 
+    const name = formData.get('name') as string
+    const email = formData.get('email') as string
+    const countryCode = formData.get('country_code') as string
+    const phoneNumber = formData.get('phone') as string
+    const phone = `${countryCode} ${phoneNumber}`
+    const comment = formData.get('comment') as string
+
+    // Validation
+    const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/
+    const phoneRegex = /^[0-9+\-\s]+$/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+    if (!nameRegex.test(name)) {
+      toast({ title: 'Nombre inválido', description: 'El nombre solo debe contener letras.', status: 'error', duration: 3000, isClosable: true })
+      setLoading(false)
+      return
+    }
+
+    if (!emailRegex.test(email)) {
+      toast({ title: 'Correo inválido', description: 'Por favor ingresa un correo válido.', status: 'error', duration: 3000, isClosable: true })
+      setLoading(false)
+      return
+    }
+
+    if (!phoneRegex.test(phone)) {
+      toast({ title: 'Teléfono inválido', description: 'El teléfono solo debe contener números.', status: 'error', duration: 3000, isClosable: true })
+      setLoading(false)
+      return
+    }
+
     const data = {
       event_name: eventName,
-      name: formData.get('name') as string,
-      email: formData.get('email') as string,
-      phone: formData.get('phone') as string,
-      comment: formData.get('comment') as string,
+      name,
+      email,
+      phone,
+      comment,
     }
 
     try {
@@ -72,7 +102,18 @@ export const EventRegistrationModal = ({ isOpen, onClose, eventName }: EventRegi
               </FormControl>
               <FormControl isRequired>
                 <FormLabel>Teléfono / WhatsApp</FormLabel>
-                <Input name="phone" placeholder="+591 70000000" />
+                <HStack>
+                  <Select name="country_code" w="120px" defaultValue="+591">
+                    <option value="+591">🇧🇴 +591</option>
+                    <option value="+51">🇵🇪 +51</option>
+                    <option value="+56">🇨🇱 +56</option>
+                    <option value="+54">🇦🇷 +54</option>
+                    <option value="+55">🇧🇷 +55</option>
+                    <option value="+1">🇺🇸 +1</option>
+                    <option value="+34">🇪🇸 +34</option>
+                  </Select>
+                  <Input name="phone" placeholder="70000000" />
+                </HStack>
               </FormControl>
               <FormControl>
                 <FormLabel>Comentario Adicional (Opcional)</FormLabel>

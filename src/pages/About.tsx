@@ -6,7 +6,7 @@ const About = () => {
     <Box>
       <Box bg="brand.50" py={20} textAlign="center">
         <Container maxW="container.md">
-          <Heading size="2xl" mb={6} color="brand.900">Sobre Nosotros</Heading>
+          <Heading size="2xl" mb={6} color="brand.900">Quiénes Somos</Heading>
           <Text fontSize="xl" color="gray.600">
             Somos una organización dedicada a democratizar el acceso a la educación científica y tecnológica en Bolivia.
           </Text>

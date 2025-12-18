@@ -12,7 +12,9 @@ import {
   Input,
   VStack,
   Text,
-  useToast
+  useToast,
+  Select,
+  HStack
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { PurchaseData } from '../services/kitService'
@@ -31,7 +33,8 @@ const PurchaseModal = ({ isOpen, onClose, itemTitle, itemPrice, onSubmit }: Purc
     name: '',
     email: '',
     phone: '',
-    address: ''
+    address: '',
+    countryCode: '+591'
   })
   const toast = useToast()
 
@@ -44,11 +47,11 @@ const PurchaseModal = ({ isOpen, onClose, itemTitle, itemPrice, onSubmit }: Purc
         price: itemPrice,
         customer_name: formData.name,
         customer_email: formData.email,
-        customer_phone: formData.phone,
+        customer_phone: `${formData.countryCode} ${formData.phone}`,
         customer_address: formData.address
       })
       onClose()
-      setFormData({ name: '', email: '', phone: '', address: '' })
+      setFormData({ name: '', email: '', phone: '', address: '', countryCode: '+591' })
     } catch (error) {
       console.error(error)
       toast({
@@ -101,12 +104,28 @@ const PurchaseModal = ({ isOpen, onClose, itemTitle, itemPrice, onSubmit }: Purc
 
               <FormControl isRequired>
                 <FormLabel>Teléfono / WhatsApp</FormLabel>
-                <Input 
-                  name="phone" 
-                  value={formData.phone} 
-                  onChange={handleChange} 
-                  placeholder="70000000" 
-                />
+                <HStack>
+                  <Select 
+                    name="countryCode" 
+                    w="120px" 
+                    value={formData.countryCode} 
+                    onChange={handleChange as any}
+                  >
+                    <option value="+591">🇧🇴 +591</option>
+                    <option value="+51">🇵🇪 +51</option>
+                    <option value="+56">🇨🇱 +56</option>
+                    <option value="+54">🇦🇷 +54</option>
+                    <option value="+55">🇧🇷 +55</option>
+                    <option value="+1">🇺🇸 +1</option>
+                    <option value="+34">🇪🇸 +34</option>
+                  </Select>
+                  <Input 
+                    name="phone" 
+                    value={formData.phone} 
+                    onChange={handleChange} 
+                    placeholder="70000000" 
+                  />
+                </HStack>
               </FormControl>
 
               <FormControl>

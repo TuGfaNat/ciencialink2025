@@ -1,4 +1,4 @@
-import { Box, Button, Container, FormControl, FormLabel, Heading, Input, SimpleGrid, Text, Textarea, VStack, Icon, Flex, useToast } from '@chakra-ui/react'
+import { Box, Button, Container, FormControl, FormLabel, Heading, Input, SimpleGrid, Text, Textarea, VStack, Icon, Flex, useToast, Select, HStack } from '@chakra-ui/react'
 import { FaMapMarkerAlt, FaPhone, FaEnvelope } from 'react-icons/fa'
 import { useState } from 'react'
 
@@ -16,12 +16,37 @@ const Contact = () => {
     const form = e.target as HTMLFormElement
     const formData = new FormData(form)
     
-    const data = {
-      name: formData.get('name') as string,
-      email: formData.get('email') as string,
-      phone: formData.get('phone') as string,
-      message: formData.get('message') as string,
+    const name = formData.get('name') as string
+    const email = formData.get('email') as string
+    const countryCode = formData.get('country_code') as string
+    const phoneNumber = formData.get('phone') as string
+    const phone = phoneNumber ? `${countryCode} ${phoneNumber}` : ''
+    const message = formData.get('message') as string
+
+    // Validation
+    const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/
+    const phoneRegex = /^[0-9+\-\s]+$/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+    if (!nameRegex.test(name)) {
+      toast({ title: 'Nombre inválido', description: 'El nombre solo debe contener letras.', status: 'error', duration: 3000, isClosable: true })
+      setLoading(false)
+      return
     }
+
+    if (!emailRegex.test(email)) {
+      toast({ title: 'Correo inválido', description: 'Por favor ingresa un correo electrónico válido.', status: 'error', duration: 3000, isClosable: true })
+      setLoading(false)
+      return
+    }
+
+    if (phone && !phoneRegex.test(phone)) {
+      toast({ title: 'Teléfono inválido', description: 'El teléfono solo debe contener números.', status: 'error', duration: 3000, isClosable: true })
+      setLoading(false)
+      return
+    }
+    
+    const data = { name, email, phone, message }
 
     try {
       await ContactService.sendMessage(data)
@@ -110,7 +135,18 @@ const Contact = () => {
                 </FormControl>
                 <FormControl>
                   <FormLabel>Teléfono</FormLabel>
-                  <Input name="phone" placeholder="+591 70000000" />
+                  <HStack>
+                    <Select name="country_code" w="120px" defaultValue="+591">
+                      <option value="+591">🇧🇴 +591</option>
+                      <option value="+51">🇵🇪 +51</option>
+                      <option value="+56">🇨🇱 +56</option>
+                      <option value="+54">🇦🇷 +54</option>
+                      <option value="+55">🇧🇷 +55</option>
+                      <option value="+1">🇺🇸 +1</option>
+                      <option value="+34">🇪🇸 +34</option>
+                    </Select>
+                    <Input name="phone" placeholder="70000000" />
+                  </HStack>
                 </FormControl>
                 <FormControl isRequired>
                   <FormLabel>Mensaje</FormLabel>
