@@ -1,8 +1,10 @@
-import { Box, Flex, Button, Stack, Link as ChakraLink, Heading, Container, Icon, Text } from '@chakra-ui/react'
+import { Box, Flex, Button, Stack, Link as ChakraLink, Heading, Container, Icon, Text, IconButton, useDisclosure, Collapse, VStack } from '@chakra-ui/react'
 import { Link as RouterLink } from 'react-router-dom'
-import { Rocket } from 'lucide-react'
+import { Rocket, Menu, X } from 'lucide-react'
 
 const Navbar = () => {
+  const { isOpen, onToggle } = useDisclosure()
+
   return (
     <Box bg="white" boxShadow="sm" position="sticky" top="0" zIndex="sticky">
       <Container maxW="container.xl">
@@ -16,7 +18,8 @@ const Navbar = () => {
             </Flex>
           </ChakraLink>
 
-          <Stack direction="row" spacing={8} alignItems="center">
+          {/* Desktop Menu */}
+          <Stack direction="row" spacing={8} alignItems="center" display={{ base: 'none', md: 'flex' }}>
             <ChakraLink as={RouterLink} to="/nosotros" fontWeight="medium" color="gray.600" _hover={{ color: 'brand.500' }}>
               Nosotros
             </ChakraLink>
@@ -36,7 +39,42 @@ const Navbar = () => {
               Eventos
             </Button>
           </Stack>
+
+          {/* Mobile Menu Button */}
+          <IconButton
+            display={{ base: 'flex', md: 'none' }}
+            onClick={onToggle}
+            icon={isOpen ? <X size={24} /> : <Menu size={24} />}
+            variant="ghost"
+            aria-label="Toggle Navigation"
+          />
         </Flex>
+
+        {/* Mobile Menu Links */}
+        <Collapse in={isOpen} animateOpacity>
+          <Box pb={4} display={{ md: 'none' }}>
+            <VStack spacing={4} align="stretch">
+              <ChakraLink as={RouterLink} to="/nosotros" py={2} fontWeight="medium" color="gray.600" onClick={onToggle}>
+                Nosotros
+              </ChakraLink>
+              <ChakraLink as={RouterLink} to="/contacto" py={2} fontWeight="medium" color="gray.600" onClick={onToggle}>
+                Contáctanos
+              </ChakraLink>
+              <ChakraLink as={RouterLink} to="/blog" py={2} fontWeight="medium" color="gray.600" onClick={onToggle}>
+                Blog
+              </ChakraLink>
+              <ChakraLink as={RouterLink} to="/kits" py={2} fontWeight="medium" color="gray.600" onClick={onToggle}>
+                Kits
+              </ChakraLink>
+              <ChakraLink as={RouterLink} to="/cursos" py={2} fontWeight="medium" color="gray.600" onClick={onToggle}>
+                Cursos
+              </ChakraLink>
+              <Button as={RouterLink} to="/eventos" colorScheme="brand" size="sm" w="full" onClick={onToggle}>
+                Eventos
+              </Button>
+            </VStack>
+          </Box>
+        </Collapse>
       </Container>
     </Box>
   )
