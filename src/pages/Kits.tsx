@@ -14,7 +14,7 @@ const Kits = () => {
     { title: 'Kit Arduino Básico', price: '200 Bs', image: 'https://images.unsplash.com/photo-1555679427-1f6dfcce943b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80', tag: 'Principiantes' },
     { title: 'Kit Sensores IoT', price: '280 Bs', image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80', tag: 'Avanzado' },
     { title: 'Brazo Robótico 3D', price: '450 Bs', image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80', tag: 'Proyecto' },
-    { title: 'Kit Electrónica', price: '150 Bs', image: 'https://images.unsplash.com/photo-1555664424-778a1e3e18f6?auto=format&fit=crop&q=80&w=800', tag: 'Escolar' },
+    { title: 'Kit Electrónica', price: '150 Bs', image: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&q=80&w=800', tag: 'Escolar' },
     { title: 'Impresora 3D Mini', price: '2500 Bs', image: 'https://images.unsplash.com/photo-1631541909061-71e349d1f203?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80', tag: 'Pro' },
   ]
 
