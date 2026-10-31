@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ciencialink-backend
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - NODE_ENV=production
+      - FRONTEND_URL=https://ciencialink.bo
+      - SUPABASE_URL=https://ypfduxmpahqamwpqsivc.supabase.co
+      - SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwZmR1eG1wYWhxYW13cHFzaXZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MDc3NTQsImV4cCI6MjA4MDI4Mzc1NH0.ZVTaZQiE4bIHv0Euis6FEJ_ifvL1950kMzWRK7MwYnQ
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ciencialink-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    deploy:
+      resources:
+        limits:
+          memory: 256M
