@@ -22,8 +22,6 @@ services:
       dockerfile: Dockerfile
     container_name: ciencialink-backend
     restart: unless-stopped
-    ports:
-      - "4000:4000"
     environment:
       - PORT=4000
       - NODE_ENV=production
@@ -42,8 +40,6 @@ services:
       dockerfile: Dockerfile
     container_name: ciencialink-frontend
     restart: unless-stopped
-    ports:
-      - "3000:80"
     depends_on:
       - backend
     deploy:
