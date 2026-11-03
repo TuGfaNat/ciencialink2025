@@ -1,6 +1,23 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://ypfduxmpahqamwpqsivc.supabase.co'
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwZmR1eG1wYWhxYW13cHFzaXZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MDc3NTQsImV4cCI6MjA4MDI4Mzc1NH0.ZVTaZQiE4bIHv0Euis6FEJ_ifvL1950kMzWRK7MwYnQ'
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Si no hay variables de supabase válidas, usamos un dummy con métodos encadenables para no romper typescript
+export const supabase: any = (supabaseUrl && supabaseAnonKey && !supabaseUrl.includes('ypfduxmpahqamwpqsivc'))
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : {
+      from: () => {
+        const chain: any = {
+          select: () => chain,
+          insert: () => chain,
+          update: () => chain,
+          delete: () => chain,
+          eq: () => chain,
+          single: () => Promise.resolve({ data: null, error: null }),
+          order: () => chain,
+          then: (resolve: any) => resolve({ data: [], error: null }),
+        }
+        return chain
+      },
+    }

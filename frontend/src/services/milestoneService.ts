@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase'
+import { API_BASE_URL } from '../config/api'
 
 export interface Milestone {
   id: number
@@ -57,15 +57,14 @@ const DEFAULT_MILESTONES: Milestone[] = [
 export const MilestoneService = {
   async getAll(): Promise<Milestone[]> {
     try {
-      const { data, error } = await supabase
-        .from('milestones')
-        .select('*')
-        .order('id', { ascending: true })
-
-      if (error || !data || data.length === 0) {
-        return DEFAULT_MILESTONES
+      const res = await fetch(`${API_BASE_URL}/api/milestones`)
+      if (res.ok) {
+        const json = await res.json()
+        if (json.data && json.data.length > 0) {
+          return json.data
+        }
       }
-      return data as Milestone[]
+      return DEFAULT_MILESTONES
     } catch {
       return DEFAULT_MILESTONES
     }
