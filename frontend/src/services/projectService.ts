@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase'
+import { API_BASE_URL } from '../config/api'
 
 export interface Project {
   id: number
@@ -62,15 +62,14 @@ const DEFAULT_PROJECTS: Project[] = [
 export const ProjectService = {
   async getAll(): Promise<Project[]> {
     try {
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('progress_pct', { ascending: false })
-
-      if (error || !data || data.length === 0) {
-        return DEFAULT_PROJECTS
+      const res = await fetch(`${API_BASE_URL}/api/projects`)
+      if (res.ok) {
+        const json = await res.json()
+        if (json.data && json.data.length > 0) {
+          return json.data
+        }
       }
-      return data as Project[]
+      return DEFAULT_PROJECTS
     } catch {
       return DEFAULT_PROJECTS
     }

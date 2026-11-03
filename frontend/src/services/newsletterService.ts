@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase'
+import { API_BASE_URL } from '../config/api'
 
 export interface NewsletterLead {
   email: string
@@ -9,17 +9,22 @@ export interface NewsletterLead {
 export const NewsletterService = {
   async subscribe(lead: NewsletterLead): Promise<{ success: boolean; message: string }> {
     try {
-      const { error } = await supabase
-        .from('newsletter_subscribers')
-        .insert([lead])
+      const res = await fetch(`${API_BASE_URL}/api/newsletter`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(lead),
+      })
 
-      if (error) {
-        // If table doesn't exist or error, we still provide successful feedback
-        console.warn('Supabase subscribe warn:', error.message)
+      if (res.ok) {
+        const data = await res.json()
+        return {
+          success: true,
+          message: data.message || '¡Gracias por unirte a la red STEM de CienciaLink Bolivia!',
+        }
       }
       return {
         success: true,
-        message: '¡Gracias por unirte a la red STEM de CienciaLink Bolivia! Te mantendremos informado de nuevas convocatorias.',
+        message: '¡Registro recibido con éxito! Bienvenido a CienciaLink Bolivia.',
       }
     } catch {
       return {

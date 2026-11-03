@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase'
+import { API_BASE_URL } from '../config/api'
 
 export interface ScientificPaper {
   id: number
@@ -67,15 +67,14 @@ const DEFAULT_PAPERS: ScientificPaper[] = [
 export const ScientificPaperService = {
   async getAll(): Promise<ScientificPaper[]> {
     try {
-      const { data, error } = await supabase
-        .from('scientific_papers')
-        .select('*')
-        .order('id', { ascending: false })
-
-      if (error || !data || data.length === 0) {
-        return DEFAULT_PAPERS
+      const res = await fetch(`${API_BASE_URL}/api/papers`)
+      if (res.ok) {
+        const json = await res.json()
+        if (json.data && json.data.length > 0) {
+          return json.data
+        }
       }
-      return data as ScientificPaper[]
+      return DEFAULT_PAPERS
     } catch {
       return DEFAULT_PAPERS
     }

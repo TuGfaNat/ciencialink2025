@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase'
+import { API_BASE_URL } from '../config/api'
 
 export interface Commission {
   id: number
@@ -144,15 +144,14 @@ const DEFAULT_COMMISSIONS: Commission[] = [
 export const CommissionService = {
   async getAll(): Promise<Commission[]> {
     try {
-      const { data, error } = await supabase
-        .from('commissions')
-        .select('*')
-        .order('id', { ascending: true })
-
-      if (error || !data || data.length === 0) {
-        return DEFAULT_COMMISSIONS
+      const res = await fetch(`${API_BASE_URL}/api/commissions`)
+      if (res.ok) {
+        const json = await res.json()
+        if (json.data && json.data.length > 0) {
+          return json.data
+        }
       }
-      return data as Commission[]
+      return DEFAULT_COMMISSIONS
     } catch {
       return DEFAULT_COMMISSIONS
     }
@@ -165,27 +164,25 @@ export const CommissionService = {
 
   async getWallPosts(commissionSlug: string): Promise<CommissionPost[]> {
     try {
-      const { data, error } = await supabase
-        .from('commission_wall_posts')
-        .select('*')
-        .eq('commission_slug', commissionSlug)
-        .order('created_at', { ascending: false })
-
-      if (error || !data || data.length === 0) {
-        return [
-          {
-            id: 1,
-            commission_slug: commissionSlug,
-            author_name: 'Líder de Comisión',
-            author_role: 'Coordinador',
-            content: `Bienvenidos al muro interactivo de la Comisión de ${commissionSlug.toUpperCase()}. Aquí compartimos avances, papers y consultas técnicas entre miembros.`,
-            tags: ['Anuncio', 'Bienvenida', 'Comunidad'],
-            likes_count: 12,
-            created_at: new Date().toLocaleDateString('es-BO'),
-          },
-        ]
+      const res = await fetch(`${API_BASE_URL}/api/commissions/${commissionSlug}/wall`)
+      if (res.ok) {
+        const data = await res.json()
+        if (Array.isArray(data) && data.length > 0) {
+          return data
+        }
       }
-      return data as CommissionPost[]
+      return [
+        {
+          id: 1,
+          commission_slug: commissionSlug,
+          author_name: 'Líder de Comisión',
+          author_role: 'Coordinador',
+          content: `Bienvenidos al muro interactivo de la Comisión de ${commissionSlug.toUpperCase()}. Aquí compartimos avances, papers y consultas técnicas entre miembros.`,
+          tags: ['Anuncio', 'Bienvenida', 'Comunidad'],
+          likes_count: 12,
+          created_at: new Date().toLocaleDateString('es-BO'),
+        },
+      ]
     } catch {
       return [
         {
@@ -204,10 +201,12 @@ export const CommissionService = {
 
   async addWallPost(post: Omit<CommissionPost, 'id' | 'likes_count' | 'created_at'>): Promise<boolean> {
     try {
-      const { error } = await supabase
-        .from('commission_wall_posts')
-        .insert([post])
-      return !error
+      const res = await fetch(`${API_BASE_URL}/api/commissions/${post.commission_slug}/wall`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(post),
+      })
+      return res.ok
     } catch {
       return false
     }
