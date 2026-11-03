@@ -1,6 +1,21 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: ciencialink-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ciencialink
+      POSTGRES_PASSWORD: ciencialink_secret_pass_2026
+      POSTGRES_DB: ciencialink
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
   backend:
     build:
       context: ./backend
@@ -12,13 +27,14 @@ services:
     environment:
       - PORT=4000
       - NODE_ENV=production
-      - FRONTEND_URL=https://ciencialink.bo
-      - SUPABASE_URL=https://ypfduxmpahqamwpqsivc.supabase.co
-      - SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwZmR1eG1wYWhxYW13cHFzaXZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MDc3NTQsImV4cCI6MjA4MDI4Mzc1NH0.ZVTaZQiE4bIHv0Euis6FEJ_ifvL1950kMzWRK7MwYnQ
+      - FRONTEND_URL=*
+      - DATABASE_URL=postgres://ciencialink:ciencialink_secret_pass_2026@db:5432/ciencialink
+    depends_on:
+      - db
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 384M
 
   frontend:
     build:
@@ -34,3 +50,6 @@ services:
       resources:
         limits:
           memory: 256M
+
+volumes:
+  pgdata:
